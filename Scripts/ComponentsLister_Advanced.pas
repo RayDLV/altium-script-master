@@ -71,8 +71,7 @@ begin
             // Controlla se è un documento schematico
             if Document.DM_DocumentKind = 'SCH' then
             begin
-                // Accedi al documento schematico direttamente  
-                SchDoc := Document;
+                SchDoc := SchServer.GetSchDocumentByPath(Document.DM_FullPath);
                 if SchDoc <> nil then
                 begin
                     ComponentsList.Add('### DOCUMENTO: ' + Document.DM_FileName + ' ###');
