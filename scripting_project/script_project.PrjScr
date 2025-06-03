@@ -1,0 +1,12 @@
+[Design]
+Version=1.0
+
+[Document1]
+DocumentPath=\\192.168.10.89\Multimedia\Altium Scripting\scripting_project\logger.pas
+
+[Document2]
+DocumentPath=\\192.168.10.89\Multimedia\Altium Scripting\scripting_project\main.pas
+
+[Document3]
+DocumentPath=\\192.168.10.89\Multimedia\Altium Scripting\Scripts\certifica.pas
+
