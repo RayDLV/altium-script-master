@@ -1,0 +1,98 @@
+[Design]
+Version=1.0
+HierarchyMode=0
+
+[Doc1]
+DocumentPath=certifica.pas
+DocumentType=OpenDocument
+
+[Document1]
+ItemType=SchServer.ScriptDoc
+Document1=certifica.pas
+Count=1
+
+[ProjectGroup]
+Count=0
+
+[Project1]
+ProjectPath=certifica.PRJSCR
+Count=1
+
+[OutputGroup1]
+Name=Netlist Outputs
+Description=
+PrinterOptions=Record=0|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|BeginDoc=1|EndDoc=1
+OutputType1=PCAD
+OutputName1=PCAD for PCB
+OutputDocumentPath1=
+OutputVariantName1=
+OutputDefault1=0
+OutputType2=GenCAD
+OutputName2=GenCAD for PCB
+OutputDocumentPath2=
+OutputVariantName2=
+OutputDefault2=0
+OutputType3=Protel
+OutputName3=Protel for PCB
+OutputDocumentPath3=
+OutputVariantName3=
+OutputDefault3=0
+
+[OutputGroup2]
+Name=Simulator Outputs
+Description=
+PrinterOptions=Record=0|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|BeginDoc=1|EndDoc=1
+OutputType1=AdvSim
+OutputName1=Mixed Sim
+OutputDocumentPath1=
+OutputVariantName1=
+OutputDefault1=0
+
+[OutputGroup3]
+Name=Documentation Outputs
+Description=
+PrinterOptions=Record=0|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|BeginDoc=1|EndDoc=1
+OutputType1=PDF
+OutputName1=PDF
+OutputDocumentPath1=
+OutputVariantName1=
+OutputDefault1=0
+
+[OutputGroup4]
+Name=Assembly Outputs
+Description=
+PrinterOptions=Record=0|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|BeginDoc=1|EndDoc=1
+OutputType1=Assembly
+OutputName1=Assembly Drawings
+OutputDocumentPath1=
+OutputVariantName1=
+OutputDefault1=0
+
+[OutputGroup5]
+Name=Fabrication Outputs
+Description=
+PrinterOptions=Record=0|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|BeginDoc=1|EndDoc=1
+OutputType1=Gerber
+OutputName1=Gerber Files
+OutputDocumentPath1=
+OutputVariantName1=
+OutputDefault1=0
+
+[OutputGroup6]
+Name=Report Outputs
+Description=
+PrinterOptions=Record=0|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|BeginDoc=1|EndDoc=1
+OutputType1=ReportHierarchy
+OutputName1=Report Project Hierarchy
+OutputDocumentPath1=
+OutputVariantName1=
+OutputDefault1=0
+OutputType2=ReportBillOfMaterials
+OutputName2=Bill of Materials
+OutputDocumentPath2=
+OutputVariantName2=
+OutputDefault2=0
+
+[Preferences]
+PrefsVaultGUID=
+PrefsRevisionGUID= 
