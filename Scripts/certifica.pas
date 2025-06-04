@@ -71,10 +71,7 @@ Function GetUserSignature(): String;
 Begin
     // Versione semplificata per compatibilità con Altium DelphiScript
     // In futuro si può migliorare con un dialog personalizzato
-    Result := 'Certificatore Altium - ' + DateToStr(Now);
-    
-    ShowMessage('Certificazione eseguita da: ' + Result + #13#10 + 
-                'Nota: Modifica questa funzione per personalizzare la firma del certificatore.');
+    Result := 'Certificatore Altium';
 End;
 {..............................................................................}
 
@@ -88,19 +85,12 @@ Begin
     Begin
         CertificatesFolderPath := ProjectPath + '\' + CertificatesFolder;
         
-        ShowMessage('DEBUG: Creazione cartella certificati:' + #13#10 + 
-                   'Percorso progetto: ' + ProjectPath + #13#10 +
-                   'Cartella certificati: ' + CertificatesFolderPath); // Debug
-        
         // Versione semplificata - tenta di creare la cartella
         Try
             CreateDir(CertificatesFolderPath);
-            ShowMessage('DEBUG: Cartella creata/verificata: ' + CertificatesFolderPath); // Debug
             Result := True;
         Except
             // Se fallisce, continua comunque (la cartella potrebbe già esistere)
-            ShowMessage('ATTENZIONE: Impossibile creare/verificare la cartella: ' + CertificatesFolderPath + #13#10 + 
-                       'Assicurati che esista manualmente e che ci siano i permessi di scrittura.');
             Result := True;  // Continua comunque
         End;
     End;
@@ -229,12 +219,12 @@ Function GeneratePDFContent(ComponentIndex: Integer; ProjectName: String; Projec
 Var
     Content: String;
 Begin
-    Content := 'CERTIFICATO COMPONENTE ELETTRONICO' + #13#10 + #13#10;
+    Content := 'CERTIFICATO COMPONENTE' + #13#10 + #13#10;
     Content := Content + '================================================' + #13#10;
     Content := Content + 'INFORMAZIONI PROGETTO:' + #13#10;
-    Content := Content + '  Nome Progetto: ' + ProjectName + #13#10;
+    Content := Content + '  Nome: ' + ProjectName + #13#10;
     Content := Content + '  Percorso: ' + ProjectPath + #13#10;
-    Content := Content + '  Data Creazione Progetto: ' + ProjectCreationDate + #13#10;
+    Content := Content + '  Data Creazione: ' + ProjectCreationDate + #13#10;
     Content := Content + '  Data Certificazione: ' + CertificationDate + #13#10 + #13#10;
     
     Content := Content + 'INFORMAZIONI COMPONENTE:' + #13#10;
@@ -273,13 +263,9 @@ Begin
     ProjectCreationDate := GetProjectCreationDate(ProjectPath);
     CertificationDate := DateToStr(Now);
     
-    // Crea nome file basato sul primo designatore
-    FileName := ComponentFirstDesignator[ComponentIndex] + '_Certificato.txt';
+    // Crea nome file basato sul Library Reference
+    FileName := ComponentDescription[ComponentIndex] + '_Certificato.txt';
     FilePath := ProjectPath + '\' + CertificatesFolder + '\' + FileName;
-    
-    ShowMessage('DEBUG: Tentativo creazione file:' + #13#10 + 
-                'Nome: ' + FileName + #13#10 +
-                'Percorso completo: ' + FilePath); // Debug
     
     Try
         Content := GeneratePDFContent(ComponentIndex, ProjectName, ProjectPath, 
@@ -289,8 +275,6 @@ Begin
         Rewrite(TextFile);
         Write(TextFile, Content);
         CloseFile(TextFile);
-        
-        ShowMessage('DEBUG: File creato con successo: ' + FilePath); // Debug
         
         // Restituisce il percorso relativo
         Result := CertificatesFolder + '\' + FileName;
@@ -342,7 +326,7 @@ Begin
     
     If (ComponentIndex <> -1) And ComponentActive[ComponentIndex] Then
     Begin
-        Result := CertificatesFolder + '\' + ComponentFirstDesignator[ComponentIndex] + '_Certificato.txt';
+        Result := CertificatesFolder + '\' + ComponentDescription[ComponentIndex] + '_Certificato.txt';
     End
     Else
         Result := '';
@@ -356,10 +340,8 @@ Var
     Param: ISch_Parameter;
     Iterator: ISch_Iterator;
     CertificatePath: String;
-    LocalComponentCount: Integer;
     ProcessedCount: Integer;
 Begin
-    LocalComponentCount := 0;
     ProcessedCount := 0;
     
     Iterator := SchDoc.SchIterator_Create;
@@ -371,14 +353,9 @@ Begin
            Component := Iterator.FirstSchObject;
            While Component <> Nil Do
            Begin
-              LocalComponentCount := LocalComponentCount + 1;
-              
               If Not ComponentHasCertificateParam(Component) Then
               Begin
                   CertificatePath := GetCertificatePathForComponent(Component);
-                  
-                  ShowMessage('DEBUG: Componente ' + VarToStr(Component.Designator.Text) + #13#10 +
-                             'Percorso certificato: ' + CertificatePath); // Debug
                   
                   If CertificatePath <> '' Then
                   Begin
@@ -395,20 +372,8 @@ Begin
                       Component.AddSchObject(Param);
                       SchServer.RobotManager.SendMessage(Component.I_ObjectAddress, c_BroadCast, SCHM_PrimitiveRegistration, Param.I_ObjectAddress);
                       
-                      ShowMessage('DEBUG: Attributo aggiunto a ' + VarToStr(Component.Designator.Text) + 
-                                 ' con valore: ' + CertificatePath); // Debug
-                      
                       ProcessedCount := ProcessedCount + 1;
-                  End
-                  Else
-                  Begin
-                      ShowMessage('DEBUG: Nessun certificato trovato per ' + VarToStr(Component.Designator.Text)); // Debug
                   End;
-              End
-              Else
-              Begin
-                  ShowMessage('DEBUG: Componente ' + VarToStr(Component.Designator.Text) + 
-                             ' ha già l attributo certificato'); // Debug
               End;
               
               Component := Iterator.NextSchObject;
@@ -420,10 +385,6 @@ Begin
     Finally
         SchServer.ProcessControl.PostProcess(SchDoc, '');
     End;
-    
-    ShowMessage('Foglio: ' + SchDoc.DocumentName + #13#10 + 
-                'Componenti totali: ' + IntToStr(LocalComponentCount) + #13#10 +
-                'Parametri aggiunti: ' + IntToStr(ProcessedCount));
 End;
 {..............................................................................}
 
@@ -436,10 +397,7 @@ Var
     SchDocument: IServerDocument;
     Component: ISch_Component;
     Iterator: ISch_Iterator;
-    TotalComponents: Integer;
 Begin
-    TotalComponents := 0;
-    
     // Prima fase: raccogli informazioni su tutti i componenti
     For I := 0 To Project.DM_LogicalDocumentCount - 1 Do
     Begin
@@ -460,7 +418,6 @@ Begin
                         While Component <> Nil Do
                         Begin
                             AddComponentInfo(Component);
-                            TotalComponents := TotalComponents + 1;
                             Component := Iterator.NextSchObject;
                         End;
                     Finally
@@ -471,9 +428,6 @@ Begin
             End;
         End;
     End;
-    
-    ShowMessage('Raccolte informazioni per ' + IntToStr(TotalComponents) + ' componenti.' + #13#10 +
-                'Tipi unici di componenti trovati: ' + IntToStr(ComponentCount));
 End;
 {..............................................................................}
 
@@ -495,8 +449,6 @@ Begin
                 GeneratedCount := GeneratedCount + 1;
         End;
     End;
-    
-    ShowMessage('Generati ' + IntToStr(GeneratedCount) + ' certificati di ' + IntToStr(ComponentCount) + ' tipi di componenti.');
 End;
 {..............................................................................}
 
@@ -553,7 +505,7 @@ Var
     Project: IProject;
     ProjectPath: String;
 Begin
-    ShowMessage('DEBUG: Script certifica.pas avviato'); // Debug
+    ShowMessage('Avvio certificazione componenti...');
 
     // Ottieni il progetto corrente
     Project := GetWorkspace.DM_FocusedProject;
@@ -563,8 +515,6 @@ Begin
         Exit;
     End;
 
-    ShowMessage('DEBUG: Progetto trovato: ' + Project.DM_ProjectFileName); // Debug
-
     // Ottieni il percorso del progetto
     ProjectPath := GetProjectPath;
     If ProjectPath = '' Then
@@ -572,8 +522,6 @@ Begin
         ShowMessage('Impossibile determinare il percorso del progetto!');
         Exit;
     End;
-
-    ShowMessage('DEBUG: Percorso progetto: ' + ProjectPath); // Debug
 
     // Ottieni la firma dell'utente
     UserSignature := GetUserSignature();

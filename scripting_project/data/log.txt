@@ -1,1 +1,2 @@
-
+Startup Altium script
+[04/06/25 14:18:07.989]: Starting script

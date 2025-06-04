@@ -1,7 +1,7 @@
 
 Const
   ProjectFilePath = 'None';
-  DataFolder = '\\192.168.10.89\Multimedia\Altium Scripting/scripting_project/data/';
+  DataFolder = 'C:\Users\ricca\OneDrive\Desktop\Develop\altium-script-master/scripting_project/data/';
 
 Procedure SCRIPTING_SYSTEM_MAIN;
 Var

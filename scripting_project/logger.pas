@@ -1,6 +1,6 @@
 
 Const
-  LogFilePath = '\\192.168.10.89\Multimedia\Altium Scripting\scripting_project\data\log.txt';
+  LogFilePath = 'C:\Users\ricca\OneDrive\Desktop\Develop\altium-script-master\scripting_project\data\log.txt';
 
 Procedure log_str(Const data : String);
 Var
